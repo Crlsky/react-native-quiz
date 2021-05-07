@@ -4,48 +4,19 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const questionsLib = [
-  {id: 1, question: "Czy pies szczeka?", answers: [
-    {title: "Tak", correct: 1},
-    {title: "Nie", correct: 0}
-  ]},
-  {id: 2, question: "Czy kot szczeka?", answers: [
-    {title: "Tak", correct: 0},
-    {title: "Nie", correct: 1}
-  ]},
-  {id: 3, question: "Czy kot miałczy?", answers: [
-    {title: "Tak", correct: 1},
-    {title: "Nie", correct: 0}
-  ]},
-  {id: 4, question: "Czy pies miałczy?", answers: [
-    {title: "Tak", correct: 0},
-    {title: "Nie", correct: 1}
-  ]},{}
+  {id: 1, question: "Czy pies szczeka?", answers: 1},
+  {id: 2, question: "Czy kot szczeka?", correct: 0},
+  {id: 3, question: "Czy kot miałczy?", correct: 1},
+  {id: 4, question: "czy pies miałczy?", correct: 0},
 ]
 
 let score = 0;
 
-function ButtonProvider({questionNumber}) {
-
-  return(
-    <View>
-      {questionsLib[questionNumber-1].answers.map(answer => (
-        <Button
-          title={answer.title}
-          onPress={() => {
-            navigation.push('Quizz', {
-              questionNumber: questionNumber+1,
-              answer: answer.correct
-            })}}
-        />
-      ))}
-    </View>
-  );
-}
-
 function QuizzScreen({route, navigation}) {
   const { questionNumber, answer } = route.params;
+  console.log(questionNumber,answer);
 
-  if(answer)
+  if(questionNumber<=4 && answer && questionsLib[questionNumber-1].correct == answer)
     score+=1;
 
   if(questionNumber==5)
@@ -53,9 +24,24 @@ function QuizzScreen({route, navigation}) {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Pytanie numer {questionNumber}</Text>
-      <Text>{questionsLib[questionNumber-1].question}</Text>
-      <ButtonProvider questionNumber={questionNumber} />
+      <Text>Question number {questionNumber}</Text>
+      <Text></Text>
+      <Button
+          title="Tak"
+          onPress={() => {
+            navigation.push('Quizz', {
+              questionNumber: questionNumber+1,
+              answer: 1
+            })}}
+        />
+      <Button
+        title="Nie"
+        onPress={() => {
+          navigation.push('Quizz', {
+            questionNumber: questionNumber+1,
+            answer: 0
+          })}}
+      />
     </View>
   );
 }
